@@ -27,7 +27,6 @@ pipeline {
                     --name $CONTAINER_NAME \
                     --network $DOCKER_NETWORK \
                     $IMAGE_NAME:$IMAGE_TAG
-"
                   sleep 10
 
                   echo "Calling /ping endpoint inside the ephemeral environment"
