@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = 'devops_task'
+        IMAGE_TAG  = "build-${env.BUILD_NUMBER}"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,35 +15,20 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh 'echo "Build & Test stage (TODO: docker build + pytest)"'
-            }
-        }
-
-        stage('Integration Test') {
-            steps {
-                sh 'echo "Integration Test stage (TODO: ephemeral environment)"'
-            }
-        }
-
-        stage('Push Image') {
-            steps {
-                sh 'echo "Push Image stage (TODO: docker push)"'
-            }
-        }
-
-        stage('Cleanup') {
-            steps {
-                sh 'echo "Cleanup stage (TODO: docker cleanup)"'
+                sh '''
+                  echo "Building Docker image $IMAGE_NAME:$IMAGE_TAG"
+                  docker build -t $IMAGE_NAME:$IMAGE_TAG .
+                '''
             }
         }
     }
 
     post {
         success {
-            sh 'echo "Pipeline succeeded (TODO: notifications)"'
+            echo 'Pipeline succeeded.'
         }
         failure {
-            sh 'echo "Pipeline failed (TODO: notifications)"'
+            echo 'Pipeline failed.'
         }
     }
 }
