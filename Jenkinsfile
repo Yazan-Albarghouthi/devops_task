@@ -67,12 +67,26 @@ pipeline {
         }
     }
 
-    post {
+    
+       post {
         success {
-            echo 'Pipeline succeeded.'
+            mail(
+                to: 'albarghouthi.yh@gmail.com',
+                subject: "Build SUCCESS",
+                body: """Commit ID: ${env.GIT_COMMIT ?: 'unknown'}
+                Build URL: ${env.BUILD_URL}
+                Test summary: Unit tests (pytest in Docker builder stage) + ephemeral /ping check: SUCCESS."""
+            )
         }
         failure {
-            echo 'Pipeline failed.'
+            mail(
+                to: 'albarghouthi.yh@gmail.com',
+                subject: "Build FAILURE",
+                body: """Commit ID: ${env.GIT_COMMIT ?: 'unknown'}
+                Build URL: ${env.BUILD_URL}
+                Test summary: One or more of the following failed: Docker build / pytest / ephemeral /ping check / push image. Check Jenkins console logs."""
+            )
         }
     }
+
 }
